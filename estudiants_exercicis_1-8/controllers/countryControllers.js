@@ -1,15 +1,29 @@
+const { CountryModel } = require('../models/country');
+
 const Country = require('../models/country').CountryModel;
 
 exports.getHomePage = (req, res) => {
     res.render('index');
 }
 
-exports.postSendData = (req, res) => {
-    const fakeData = {
-        conuntryName: "spain",
-        population: 46438420,
-        urlFlag: "https://restcountries.eu/data/esp.svg"
-    }
+exports.postSendData = async (req, res) => {
 
-    res.send("Dades rebudes:" + JSON.stringify(fakeData));
+    const {country, population, urlFlag } = req.body;
+
+    const country2 = new Country ({
+        name: country,
+        flagURL: urlFlag,
+        population: population
+        
+    });
+
+    /* console.log('El valor de country ', country); */
+
+    await country2.save();
+    
+
+    res.send("Dades rebudes:" + JSON.stringify(country2));
+
+    /* await mongoose.disconnect(); */
 }
+
